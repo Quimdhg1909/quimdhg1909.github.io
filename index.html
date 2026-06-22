@@ -1,322 +1,923 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emergencia 1909</title>
+<meta charset="UTF-8">
+<title>Reacciones Químicas — Transformando la vida cotidiana</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=Pacifico&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blood:#7c0f15;
+    --blood-bright:#c41822;
+    --ink:#0b0a09;
+    --ink-2:#100c0b;
+    --panel:#161210;
+    --bone:#f1ebdf;
+    --bone-dim:#c9c0b4;
+    --nav-h:64px;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--bone);
+    font-family:'Barlow', sans-serif;
+  }
+  section, header, footer{ scroll-margin-top:var(--nav-h); }
+  img,svg{ max-width:100%; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 1.4rem; }
+  a{ color:inherit; }
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+  /* ===== sprite ===== */
+  .sprite{ position:absolute; width:0; height:0; overflow:hidden; }
+  .icon{ width:100%; height:100%; display:block; }
 
-        html {
-            font-size: clamp(14px, 2.2vw, 18px);
-        }
+  /* créditos */
+  .credits-bar{
+    background:var(--ink-2);
+    border-bottom:1px solid var(--blood);
+    padding:0.7rem 1.4rem;
+    text-align:center;
+  }
+  .credits-bar .names{
+    font-family:'Oswald', sans-serif; font-weight:600; font-size:0.78rem;
+    letter-spacing:0.04em; color:var(--bone); text-transform:uppercase;
+    margin-bottom:0.2rem;
+  }
+  .credits-bar .meta{
+    font-family:'Barlow', sans-serif; font-size:0.74rem;
+    color:var(--bone-dim); letter-spacing:0.01em;
+  }
+  .credits-bar .meta .sep{ color:var(--blood-bright); margin:0 0.5rem; }
 
-        body {
-            margin: 0;
-            background-color: #000000;
-            color: #FFFFFF;
-            font-family: "Courier New", Courier, monospace;
-            text-align: center;
-            min-height: 100vh;
-            padding: clamp(15px, 5vw, 40px);
-            font-size: 1em;
-        }
+  /* ===== NAV ===== */
+  nav.topnav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(11,10,9,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:0.12rem solid var(--blood);
+    height:var(--nav-h);
+    display:flex; align-items:center;
+  }
+  nav.topnav .wrap{ display:flex; align-items:center; justify-content:space-between; width:100%; }
+  .brand{
+    font-family:'Anton', sans-serif;
+    font-size:1.15rem;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+    color:var(--bone);
+    text-decoration:none;
+  }
+  .brand span{ color:var(--blood-bright); }
+  .navlinks{ display:flex; gap:1.6rem; list-style:none; margin:0; padding:0; }
+  .navlinks a{
+    font-family:'Oswald', sans-serif;
+    font-weight:600;
+    font-size:0.8rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    text-decoration:none;
+    color:var(--bone-dim);
+    transition:color .2s;
+  }
+  .navlinks a:hover{ color:var(--blood-bright); }
+  @media (max-width:680px){ .navlinks{ gap:0.9rem; } .navlinks span.num{ display:none; } }
 
-        /* Pantalla de contraseña */
-        #login {
-            margin-top: clamp(40px, 12vh, 120px);
-            min-height: 80vh;
-            cursor: pointer;
-        }
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(180deg,
+      #b21420 0%, #8c1018 20%, #5a0c10 42%, #2b0608 64%, #0b0606 86%, var(--ink) 100%);
+    padding-bottom:2.5rem;
+  }
+  .hero::before{
+    content:""; position:absolute; inset:0;
+    background-image:radial-gradient(circle, rgba(0,0,0,0.45) 1px, transparent 1.2px);
+    background-size:7px 7px;
+    mix-blend-mode:multiply; opacity:0.55; pointer-events:none;
+  }
+  .hero::after{
+    content:""; position:absolute; inset:0;
+    background-image:radial-gradient(circle, rgba(255,255,255,0.10) 0.8px, transparent 1px);
+    background-size:4px 4px;
+    mix-blend-mode:overlay; opacity:0.6; pointer-events:none;
+  }
+  .dash-bar{
+    position:relative; z-index:2;
+    display:flex; align-items:center; gap:0.9rem;
+    padding:0.9rem 1.4rem;
+    font-family:'Oswald', sans-serif; font-weight:600;
+    font-size:clamp(0.6rem,1.1vw,0.78rem);
+    letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--bone);
+  }
+  .dash-bar .line{ flex:1; height:1px; background:rgba(241,235,223,0.5); }
+  .dash-bar span:not(.line){ white-space:nowrap; }
 
-        pre.ascii-title {
-            font-family: "Courier New", Courier, monospace;
-            color: #FFFFFF;
-            font-size: clamp(2px, 0.9vw, 5px);
-            line-height: 1.1;
-            text-shadow: 0 0 6px rgba(255,255,255,0.6);
-            margin: 0 auto clamp(15px, 4vh, 40px);
-            white-space: pre;
-            display: inline-block;
-            text-align: left;
-            cursor: default;
-        }
+  .hero-art{ position:relative; z-index:1; height:clamp(9rem,22vw,15rem); margin-top:0.5rem; }
+  .hero-art svg{ width:100%; height:100%; }
 
-        .input-box {
-            margin-top: clamp(15px, 4vh, 30px);
-            cursor: default;
-        }
+  .badge-corner{
+    position:absolute; z-index:3; top:4.2rem; right:1.4rem;
+    display:flex; align-items:center; gap:0.5rem;
+    border:1px solid var(--bone); background:rgba(11,10,9,0.45);
+    padding:0.4rem 0.7rem;
+  }
+  .badge-corner .big{ font-family:'Anton', sans-serif; font-size:1.3rem; line-height:1; }
+  .badge-corner .divider{ width:1px; height:1.6rem; background:var(--bone); }
+  .badge-corner .lines{
+    font-family:'Oswald', sans-serif; font-weight:600; font-size:0.46rem;
+    letter-spacing:0.08em; line-height:1.5; text-transform:uppercase;
+  }
+  @media (max-width:680px){ .badge-corner{ display:none; } }
 
-        input {
-            background-color: transparent;
-            border: none;
-            border-bottom: 1px solid #FFFFFF;
-            padding: clamp(10px, 2vh, 16px) 10px;
-            font-size: 1em;
-            color: #FFFFFF;
-            border-radius: 0;
-            width: clamp(180px, 60vw, 260px);
-            text-align: center;
-            letter-spacing: clamp(4px, 1.5vw, 8px);
-            font-family: "Courier New", Courier, monospace;
-        }
+  .title-wrap{ position:relative; z-index:2; padding:0 1.4rem; margin-top:-1.4rem; }
+  h1.title{
+    font-family:'Anton', sans-serif; font-weight:400; text-transform:uppercase;
+    font-size:clamp(2.6rem,9vw,6.6rem); line-height:0.98; margin:0;
+    color:var(--bone); filter:url(#roughen);
+    text-shadow:0.16rem 0.16rem 0 rgba(0,0,0,0.45);
+  }
+  .script{
+    position:relative; z-index:2;
+    font-family:'Pacifico', cursive;
+    font-size:clamp(1.3rem,4.4vw,2.6rem);
+    color:var(--blood-bright); text-align:center;
+    margin-top:-0.4rem;
+    text-shadow:0.05rem 0.05rem 0 rgba(0,0,0,0.5);
+    filter:url(#roughen-soft);
+  }
+  .checker{
+    position:relative; z-index:2; height:0.55rem;
+    margin:1rem 1.4rem 1.2rem;
+    background-image:repeating-conic-gradient(#000 0% 25%, var(--bone) 0% 50%);
+    background-size:0.9rem 0.55rem;
+  }
+  .hero-tags{
+    position:relative; z-index:2;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:1rem; padding:0 1.4rem; flex-wrap:wrap;
+  }
+  .tag-block{
+    font-family:'Oswald', sans-serif; font-weight:600;
+    font-size:0.74rem; line-height:1.6; letter-spacing:0.04em;
+    text-transform:uppercase; color:var(--bone); max-width:15rem;
+  }
+  .tag-block.right{ text-align:right; }
+  .oval-badge{
+    flex-shrink:0; border:2px solid var(--bone); border-radius:50px;
+    padding:0.55rem 1.6rem; font-family:'Oswald', sans-serif; font-weight:700;
+    font-size:0.9rem; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--bone); white-space:nowrap; margin:0 auto;
+  }
+  @media (max-width:680px){ .hero-tags{ justify-content:center; text-align:center; } .tag-block.right{ text-align:center; } }
 
-        input:focus {
-            outline: none;
-        }
+  /* ===== generic blocks ===== */
+  .block-label{
+    display:inline-block; font-family:'Oswald', sans-serif; font-weight:700;
+    font-size:0.78rem; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--ink); background:var(--blood-bright); padding:0.3rem 0.7rem;
+    margin-bottom:0.9rem;
+  }
+  .lede{ padding:3rem 0 2.4rem; border-bottom:1px solid var(--blood); }
+  .lede p{ margin:0; font-size:clamp(1rem,1.6vw,1.2rem); line-height:1.7; color:var(--bone-dim); max-width:48rem; }
 
-        input::placeholder {
-            color: #FFFFFF;
-            opacity: 0.35;
-            text-align: center;
-            letter-spacing: normal;
-        }
+  .equation{
+    background:#160708; border-bottom:1px solid var(--blood);
+    padding:1.4rem; font-family:'Oswald', sans-serif; font-weight:600;
+    letter-spacing:0.02em; font-size:clamp(0.9rem,2vw,1.3rem); color:var(--blood-bright);
+    overflow-x:auto; white-space:nowrap;
+  }
+  .equation .wrap{ display:block; }
+  .equation .lbl{ display:block; font-size:0.66rem; letter-spacing:0.18em; color:var(--bone-dim); margin-bottom:0.4rem; }
+  .equation .arrow{ color:var(--bone); padding:0 0.5rem; }
 
-        .texto-opaco {
-            opacity: 0.55;
-            font-size: 1em;
-        }
+  h2.section-title{
+    font-family:'Anton', sans-serif; font-weight:400; text-transform:uppercase;
+    font-size:clamp(1.7rem,4.5vw,2.7rem); margin:0 0 0.6rem; color:var(--bone);
+  }
+  .section-sub{ margin:0 0 1.8rem; font-size:clamp(0.95rem,1.4vw,1.08rem); line-height:1.6; color:var(--bone-dim); max-width:42rem; }
+  .section-head{ padding:3.2rem 0 0; }
+  .eyebrow-num{
+    font-family:'Anton', sans-serif; font-size:0.85rem; letter-spacing:0.1em;
+    color:var(--blood-bright); display:block; margin-bottom:0.4rem;
+  }
 
-        button {
-            margin-top: clamp(15px, 4vh, 30px);
-            padding: 2px 6px;
-            background-color: transparent;
-            border: none;
-            color: #FFFFFF;
-            font-size: 1em;
-            cursor: pointer;
-            font-family: "Courier New", Courier, monospace;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            transition: 0.2s;
-        }
+  /* identificar chips */
+  .chip-row{ display:flex; flex-wrap:wrap; gap:0.8rem; padding:1.6rem 0 3rem; }
+  .chip{
+    display:flex; align-items:center; gap:0.7rem;
+    background:var(--panel); border:1px solid var(--blood);
+    padding:0.65rem 1rem; flex:1 1 14rem;
+  }
+  .chip .icon-wrap{ width:1.7rem; height:1.7rem; flex-shrink:0; }
+  .chip span.label{ font-family:'Oswald', sans-serif; font-weight:500; font-size:0.85rem; letter-spacing:0.02em; color:var(--bone); text-transform:uppercase; }
 
-        button:hover {
-            background-color: #FFFFFF;
-            color: #000000;
-        }
+  /* tipos de reaccion - list cards */
+  .type-list{ display:flex; flex-direction:column; gap:0.9rem; padding-bottom:3rem; }
+  .type-card{
+    display:flex; gap:1.1rem; align-items:flex-start;
+    background:var(--panel); border-left:3px solid var(--blood-bright);
+    padding:1.1rem 1.3rem;
+  }
+  .type-card .icon-wrap{ width:2.6rem; height:2.6rem; flex-shrink:0; margin-top:0.15rem; }
+  .type-card h3{ font-family:'Anton', sans-serif; font-weight:400; text-transform:uppercase; font-size:1.15rem; margin:0 0 0.3rem; }
+  .type-card p{ margin:0 0 0.35rem; font-size:0.92rem; line-height:1.5; color:var(--bone-dim); }
+  .type-card .example{ font-family:'Oswald', sans-serif; font-size:0.78rem; letter-spacing:0.03em; color:var(--blood-bright); text-transform:uppercase; }
 
-        /* Sección de números */
-        #numeros {
-            display: none;
-            margin-top: clamp(20px, 6vh, 50px);
-            min-height: 80vh;
-            cursor: pointer;
-        }
+  /* card grids */
+  .grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(13.5rem,1fr)); gap:0.9rem; padding-bottom:2.4rem; }
+  .card{ background:var(--panel); border:1px solid var(--blood); padding:1.3rem 1.2rem 1.5rem; }
+  .card .icon-wrap{ width:2.4rem; height:2.4rem; margin-bottom:0.7rem; }
+  .card h3{ font-family:'Anton', sans-serif; font-weight:400; text-transform:uppercase; font-size:1.02rem; margin:0 0 0.45rem; line-height:1.15; }
+  .card p{ font-size:0.82rem; line-height:1.55; color:var(--bone-dim); margin:0; }
 
-        h1 {
-            font-size: 1em;
-            font-weight: bold;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin: clamp(10px, 3vh, 25px) 0;
-        }
+  .importance{ background:var(--blood); padding:2.4rem 0 2.8rem; margin-bottom:0; }
+  .importance h2{ font-family:'Anton', sans-serif; font-weight:400; text-transform:uppercase; font-size:1.55rem; margin:0 0 1.1rem; color:var(--bone); }
+  .check-list{ display:grid; grid-template-columns:repeat(auto-fit, minmax(15rem,1fr)); gap:0.8rem 1.6rem; list-style:none; margin:0; padding:0; }
+  .check-list li{ display:flex; gap:0.6rem; align-items:flex-start; font-size:0.92rem; line-height:1.45; border-top:1px solid rgba(241,235,223,0.35); padding-top:0.6rem; }
+  .check-list li::before{ content:"✔"; color:var(--ink); font-weight:700; flex-shrink:0; }
 
-        .lista {
-            width: 100%;
-            max-width: 420px;
-            margin: auto;
-            text-align: left;
-            margin-top: clamp(15px, 4vh, 30px);
-            border-top: 1px solid #444444;
-            cursor: default;
-        }
+  section.cat{ background:var(--ink); }
+  section.cat.alt{ background:var(--ink-2); }
 
-        .contacto {
-            padding: clamp(10px, 3vh, 18px) 12px;
-            border-bottom: 1px solid #444444;
-            display: flex;
-            justify-content: space-between;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 1em;
-        }
+  /* tabla ejemplos */
+  .table-wrap{ padding:3.2rem 0 3rem; overflow-x:auto; }
+  table.examples{ width:100%; border-collapse:collapse; min-width:36rem; }
+  table.examples th, table.examples td{ padding:0.8rem 1rem; text-align:left; font-size:0.92rem; border-bottom:1px solid var(--blood); }
+  table.examples th{ font-family:'Oswald', sans-serif; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; font-size:0.74rem; color:var(--blood-bright); background:#160708; }
+  table.examples td{ color:var(--bone-dim); }
+  table.examples tr:nth-child(even) td{ background:var(--panel); }
 
-        .contacto:hover {
-            background-color: #FFFFFF;
-            color: #000000;
-        }
+  /* importancia global */
+  .global-importance{ background:var(--ink-2); padding:3.2rem 0; border-top:1px solid var(--blood); border-bottom:1px solid var(--blood); }
+  .global-importance h2{ font-family:'Anton', sans-serif; font-weight:400; text-transform:uppercase; font-size:clamp(1.8rem,4.5vw,2.6rem); color:var(--blood-bright); margin:0 0 1.3rem; }
+  .global-importance ul{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fit, minmax(15rem,1fr)); gap:0.7rem 1.6rem; }
+  .global-importance li{ font-size:0.98rem; line-height:1.5; color:var(--bone-dim); display:flex; gap:0.6rem; align-items:flex-start; }
+  .global-importance li::before{ content:"✔"; color:var(--blood-bright); font-weight:700; }
+  .global-importance .closing{ margin-top:1.4rem; font-size:1rem; color:var(--bone); font-style:italic; }
 
-        /* Sección Archivo / Casa */
-        .seccion-extra {
-            margin-top: clamp(30px, 8vh, 60px);
-            padding-top: 0;
-            cursor: default;
-        }
+  /* datos curiosos */
+  .facts-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(15rem,1fr)); gap:0.9rem; padding:1.6rem 0 3rem; }
+  .fact{ display:flex; gap:0.9rem; align-items:flex-start; background:var(--panel); border:1px solid var(--blood); padding:1rem 1.1rem; }
+  .fact .icon-wrap{ width:2.1rem; height:2.1rem; flex-shrink:0; }
+  .fact p{ margin:0; font-size:0.85rem; line-height:1.5; color:var(--bone-dim); }
 
-        .seccion-extra a {
-            display: inline-block;
-            color: #FFFFFF;
-            text-decoration: none;
-            padding: 2px 6px;
-            font-size: 1em;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            transition: 0.2s;
-        }
+  /* recursos */
+  .resources{ padding:3.2rem 0; }
+  .res-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(15rem,1fr)); gap:1rem; margin-bottom:1.6rem; }
+  .res-card{
+    display:flex; align-items:center; gap:0.9rem;
+    background:var(--panel); border:1px solid var(--blood-bright);
+    padding:1rem 1.1rem; text-decoration:none;
+    transition:background .2s;
+  }
+  .res-card:hover{ background:#1c1715; }
+  .res-card .play{ width:2.1rem; height:2.1rem; flex-shrink:0; }
+  .res-card .res-text{ font-family:'Oswald', sans-serif; font-weight:600; font-size:0.85rem; letter-spacing:0.03em; text-transform:uppercase; color:var(--bone); }
+  .res-note{ font-size:0.85rem; color:var(--bone-dim); line-height:1.6; max-width:42rem; }
 
-        .seccion-extra a:hover {
-            background-color: #FFFFFF;
-            color: #000000;
-        }
+  /* conclusion */
+  .conclusion{ padding:3.2rem 0; border-top:1px solid var(--blood); }
+  .conclusion h2{ font-family:'Anton', sans-serif; font-weight:400; text-transform:uppercase; font-size:clamp(1.6rem,4vw,2.2rem); line-height:1.1; margin:0 0 0.9rem; color:var(--bone); }
+  .conclusion p{ font-size:clamp(0.95rem,1.5vw,1.1rem); line-height:1.7; color:var(--bone-dim); max-width:46rem; margin:0; }
 
-        .seccion-extra a.archivo {
-            text-transform: none;
-        }
+  /* frase final */
+  .quote-final{ background:#160708; padding:4rem 0; text-align:center; border-top:1px solid var(--blood); border-bottom:1px solid var(--blood); }
+  .quote-final blockquote{ margin:0; font-family:'Pacifico', cursive; font-size:clamp(1.3rem,3.6vw,2.2rem); color:var(--bone); line-height:1.5; max-width:46rem; margin:0 auto; }
+  .quote-final .mark{ font-family:'Anton', sans-serif; font-size:2.4rem; color:var(--blood-bright); line-height:0; display:block; }
 
-        .casa {
-            margin-top: clamp(8px, 2vh, 14px);
-        }
-    </style>
+  /* botón al cartel */
+  .poster-cta{ padding:3.2rem 0 2.6rem; text-align:center; }
+  .cta-button{
+    display:inline-flex; align-items:center; gap:0.7rem;
+    border:2px solid var(--bone); background:transparent;
+    padding:0.85rem 2rem; margin-top:0.7rem;
+    font-family:'Oswald', sans-serif; font-weight:700; font-size:0.95rem;
+    letter-spacing:0.12em; text-transform:uppercase; color:var(--bone);
+    text-decoration:none; transition:background .2s, color .2s;
+  }
+  .cta-button:hover{ background:var(--bone); color:var(--ink); }
+  .cta-button .arrow{ font-family:'Anton', sans-serif; font-size:1.2rem; }
+  .poster-cta .res-note{ margin:0.9rem auto 0; }
 
-    <script>
-        let realPass = "";
+  footer.final{ background:var(--ink); padding-top:0.6rem; }
 
-        function maskInput(e) {
-            const input = e.target;
-            const val = input.value;
-
-            if (val.length > realPass.length) {
-                const added = val.slice(realPass.length).replace(/[^0-9]/g, "");
-                realPass = (realPass + added).slice(0, 12);
-            } else {
-                realPass = realPass.slice(0, val.length);
-            }
-
-            input.value = "*".repeat(realPass.length);
-        }
-
-        function acceder() {
-            if (realPass === "654125875369") {
-                document.getElementById("login").style.display = "none";
-                document.getElementById("numeros").style.display = "block";
-            } else {
-                alert("Código no válido");
-            }
-        }
-
-        function regresar() {
-            realPass = "";
-            location.reload();
-        }
-    </script>
-
+  svg.filters{ position:absolute; width:0; height:0; }
+</style>
 </head>
 <body>
 
-    <!-- PANTALLA DE CONTRASEÑA -->
-    <div id="login" onclick="window.location.href='https://www.instagram.com/dhg1909'">
-        <pre class="ascii-title">
-       6RIEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER     WEEEEEEEEEEEEEEEEEEEEOL      4QEEEEEEEEEEEEEEEEEEEEI     mEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEIN1r      
-    1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN    
-  dAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA1  
- 6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR 
-rAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA6
-NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI
-EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAAAN60000000000000000000000000000000v 
-EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAv                                    
-EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAEL    4RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAi                                      
-EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEdiii0EAAAAR     RAAAAAAAAAAAAAAAAAAAAAAWdiid6AAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAA1       iddddddddddddddddddddddddddddL  
-EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF     IAAAAR     RAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAA      EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAi
-EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA      IAAAAR     RAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAA      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA      IAAAAR     RAAAAAAAAAAAAAAAAAAAAAAA1909AAAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAA      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA      IAAAAR     RAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAA      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA      IAAAAR     RAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAA      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAL     IAAAAR     RAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAd      NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-NAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAEF    VNAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAN                           mEAAAAAAAAAA
-mAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAEL                         0AAAAAAAAAA1
- 1AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAAL                      jAAAAAAAAAAN 
-  6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR  
-    RAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAAE      RAAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI    
-      mWIEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR     RAAAAAAAAAAAAAAAAAAAAEF      CIAAAAAAAAAAAAAAAAAAAAE     iAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEIRd      </pre>
+<svg class="filters">
+  <filter id="roughen">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.04" numOctaves="2" result="noise" seed="7"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="9"/>
+  </filter>
+  <filter id="roughen-soft">
+    <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" result="noise" seed="3"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="3"/>
+  </filter>
+</svg>
 
-        <div class="input-box" onclick="event.stopPropagation()">
-            <input type="text" id="pass" placeholder="Contraseña" oninput="maskInput(event)" autocomplete="off" inputmode="numeric" maxlength="12">
-        </div>
+<!-- ===== SPRITE DE ILUSTRACIONES ===== -->
+<svg class="sprite" aria-hidden="true">
+  <defs>
+    <symbol id="i-leaf" viewBox="0 0 64 64">
+      <path d="M12 52C12 30 30 12 52 12C52 34 34 52 12 52Z" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+      <path d="M14 50C24 40 34 30 50 14" stroke="var(--blood-bright)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="i-mushroom" viewBox="0 0 64 64">
+      <path d="M12 28C12 18 20 10 32 10C44 10 52 18 52 28C52 30 50 32 47 32H17C14 32 12 30 12 28Z" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+      <path d="M26 32V50M38 32V50" stroke="var(--bone)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M20 50H44" stroke="var(--blood-bright)" stroke-width="3" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="i-flame" viewBox="0 0 64 64">
+      <path d="M32 8C32 8 18 22 18 36C18 47 24 54 32 54C40 54 46 47 46 36C46 30 43 26 40 23C40 30 36 32 34 28C32 24 35 18 32 8Z" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+      <path d="M32 38C32 38 28 41 28 45C28 48.5 30 51 32 51C34 51 36 48.5 36 45C36 41 32 38 32 38Z" fill="var(--blood-bright)"/>
+    </symbol>
+    <symbol id="i-battery" viewBox="0 0 64 64">
+      <rect x="8" y="20" width="40" height="24" rx="2" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <rect x="50" y="27" width="6" height="10" fill="var(--bone)"/>
+      <rect x="15" y="26" width="12" height="12" fill="var(--blood-bright)"/>
+    </symbol>
+    <symbol id="i-water-drop" viewBox="0 0 64 64">
+      <path d="M32 8C32 8 16 28 16 40C16 49 23 56 32 56C41 56 48 49 48 40C48 28 32 8 32 8Z" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+      <path d="M24 40C24 44 27 47 31 47" stroke="var(--blood-bright)" stroke-width="3" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="i-factory" viewBox="0 0 64 64">
+      <path d="M8 54V34L22 42V34L36 42V26H56V54H8Z" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+      <path d="M44 26V14" stroke="var(--bone)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M44 14C44 10 48 10 48 6" stroke="var(--blood-bright)" stroke-width="3" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="i-sun" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="12" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <g stroke="var(--blood-bright)" stroke-width="3" stroke-linecap="round">
+        <line x1="32" y1="6" x2="32" y2="14"/>
+        <line x1="32" y1="50" x2="32" y2="58"/>
+        <line x1="6" y1="32" x2="14" y2="32"/>
+        <line x1="50" y1="32" x2="58" y2="32"/>
+        <line x1="14" y1="14" x2="19" y2="19"/>
+        <line x1="50" y1="14" x2="45" y2="19"/>
+        <line x1="14" y1="50" x2="19" y2="45"/>
+        <line x1="50" y1="50" x2="45" y2="45"/>
+      </g>
+    </symbol>
+    <symbol id="i-bread" viewBox="0 0 64 64">
+      <path d="M8 40C8 26 18 16 32 16C46 16 56 26 56 40C56 46 50 50 44 50H20C14 50 8 46 8 40Z" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+      <path d="M20 22C20 22 24 30 24 36M32 18C32 18 33 28 33 36M44 22C44 22 40 30 40 36" stroke="var(--blood-bright)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="i-egg" viewBox="0 0 64 64">
+      <path d="M32 8C20 8 12 26 12 38C12 50 20 56 32 56C44 56 52 50 52 38C52 26 44 8 32 8Z" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <path d="M24 30L30 36L26 40L34 48" stroke="var(--blood-bright)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+    <symbol id="i-caramel" viewBox="0 0 64 64">
+      <path d="M32 8V30" stroke="var(--bone)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M22 30H42C42 42 36 50 32 56C28 50 22 42 22 30Z" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+      <path d="M28 38C28 42 30 44 32 44" stroke="var(--blood-bright)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="i-apple" viewBox="0 0 64 64">
+      <path d="M32 18C24 12 14 16 12 26C10 38 18 52 28 54C30 55 34 55 36 54C46 52 54 38 52 26C50 16 40 12 32 18Z" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+      <path d="M32 18C32 18 30 12 34 7" stroke="var(--bone)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M24 32C24 38 28 42 32 42" stroke="var(--blood-bright)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="i-ferment" viewBox="0 0 64 64">
+      <path d="M20 12H44V20L48 26V52C48 55 45 58 42 58H22C19 58 16 55 16 52V26L20 20Z" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+      <circle cx="27" cy="38" r="3" fill="var(--blood-bright)"/>
+      <circle cx="36" cy="32" r="2.5" fill="var(--blood-bright)"/>
+      <circle cx="31" cy="46" r="2" fill="var(--blood-bright)"/>
+    </symbol>
+    <symbol id="i-soap" viewBox="0 0 64 64">
+      <rect x="10" y="28" width="30" height="18" rx="6" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <circle cx="48" cy="24" r="5" stroke="var(--blood-bright)" stroke-width="2.5" fill="none"/>
+      <circle cx="54" cy="36" r="3" stroke="var(--blood-bright)" stroke-width="2.5" fill="none"/>
+    </symbol>
+    <symbol id="i-spray" viewBox="0 0 64 64">
+      <rect x="22" y="22" width="16" height="34" rx="3" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <rect x="27" y="10" width="6" height="12" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <path d="M38 14L46 10M38 18L48 16M38 22L46 22" stroke="var(--blood-bright)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="i-tooth" viewBox="0 0 64 64">
+      <path d="M22 10C16 10 12 16 12 24C12 34 16 50 22 54C25 56 26 48 28 44C29 41 35 41 36 44C38 48 39 56 42 54C48 50 52 34 52 24C52 16 48 10 42 10C38 10 36 14 32 14C28 14 26 10 22 10Z" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+      <path d="M44 16L48 12" stroke="var(--blood-bright)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="i-pill" viewBox="0 0 64 64">
+      <rect x="10" y="24" width="44" height="20" rx="10" stroke="var(--bone)" stroke-width="3" fill="none" transform="rotate(-30 32 32)"/>
+      <line x1="24" y1="14" x2="40" y2="50" stroke="var(--blood-bright)" stroke-width="2.5" transform="rotate(-30 32 32)"/>
+    </symbol>
+    <symbol id="i-stomach" viewBox="0 0 64 64">
+      <path d="M20 14C14 14 10 20 10 28C10 36 16 40 16 46C16 52 22 56 30 54C36 52 34 46 40 46C48 46 54 40 54 32C54 22 46 14 36 14C30 14 28 18 24 16C22 15 21 14 20 14Z" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+    </symbol>
+    <symbol id="i-lungs" viewBox="0 0 64 64">
+      <path d="M32 12V30" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <path d="M32 30C28 22 16 22 14 32C12 42 16 54 24 54C30 54 30 44 30 36" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+      <path d="M32 30C36 22 48 22 50 32C52 42 48 54 40 54C34 54 34 44 34 36" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+      <circle cx="22" cy="40" r="2.5" fill="var(--blood-bright)"/>
+      <circle cx="42" cy="40" r="2.5" fill="var(--blood-bright)"/>
+    </symbol>
+    <symbol id="i-palette" viewBox="0 0 64 64">
+      <path d="M32 10C18 10 8 20 8 32C8 44 18 54 32 54C36 54 38 51 38 48C38 46 36 45 36 43C36 41 38 40 40 40H46C52 40 56 36 56 30C56 18 46 10 32 10Z" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+      <circle cx="20" cy="26" r="3" fill="var(--blood-bright)"/>
+      <circle cx="30" cy="20" r="3" fill="var(--bone)"/>
+      <circle cx="42" cy="22" r="3" fill="var(--blood-bright)"/>
+    </symbol>
+    <symbol id="i-bubbles" viewBox="0 0 64 64">
+      <circle cx="24" cy="44" r="6" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <circle cx="38" cy="34" r="8" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <circle cx="44" cy="16" r="5" stroke="var(--blood-bright)" stroke-width="3" fill="none"/>
+    </symbol>
+    <symbol id="i-precipitate" viewBox="0 0 64 64">
+      <path d="M24 8V36C24 36 18 44 18 50C18 55 22 58 32 58C42 58 46 55 46 50C46 44 40 36 40 36V8" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+      <path d="M20 50C20 50 25 53 32 53C39 53 44 50 44 50" stroke="var(--blood-bright)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <line x1="20" y1="8" x2="44" y2="8" stroke="var(--bone)" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-spark" viewBox="0 0 64 64">
+      <path d="M32 6L38 26H56L40 38L46 58L32 46L18 58L24 38L8 26H26Z" stroke="var(--blood-bright)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+    </symbol>
+    <symbol id="i-thermo" viewBox="0 0 64 64">
+      <rect x="27" y="8" width="10" height="34" rx="5" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <circle cx="32" cy="48" r="9" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <line x1="32" y1="18" x2="32" y2="46" stroke="var(--blood-bright)" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-scent" viewBox="0 0 64 64">
+      <path d="M14 40C14 40 20 34 14 28M26 44C26 44 34 36 26 26M38 40C38 40 46 32 38 22" stroke="var(--bone)" stroke-width="3" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="i-synthesis" viewBox="0 0 64 64">
+      <circle cx="16" cy="24" r="9" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <circle cx="16" cy="44" r="9" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <path d="M28 34H40" stroke="var(--blood-bright)" stroke-width="3" stroke-linecap="round"/>
+      <path d="M40 34L34 28M40 34L34 40" stroke="var(--blood-bright)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="50" cy="34" r="12" stroke="var(--bone)" stroke-width="3" fill="none"/>
+    </symbol>
+    <symbol id="i-decomp" viewBox="0 0 64 64">
+      <circle cx="16" cy="34" r="12" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <path d="M30 34H42" stroke="var(--blood-bright)" stroke-width="3" stroke-linecap="round"/>
+      <path d="M42 34L36 28M42 34L36 40" stroke="var(--blood-bright)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="52" cy="22" r="8" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <circle cx="52" cy="46" r="8" stroke="var(--bone)" stroke-width="3" fill="none"/>
+    </symbol>
+    <symbol id="i-balance" viewBox="0 0 64 64">
+      <line x1="32" y1="6" x2="32" y2="18" stroke="var(--bone)" stroke-width="3"/>
+      <line x1="10" y1="18" x2="54" y2="18" stroke="var(--bone)" stroke-width="3" stroke-linecap="round"/>
+      <path d="M10 18L5 34C5 38 9 40 13 40C17 40 21 38 21 34L16 18" stroke="var(--blood-bright)" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+      <path d="M48 18L43 34C43 38 47 40 51 40C55 40 59 38 59 34L54 18" stroke="var(--blood-bright)" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+      <path d="M32 18V52M20 58H44" stroke="var(--bone)" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-brain" viewBox="0 0 64 64">
+      <path d="M24 10C16 10 10 16 10 24C10 26 11 28 12 30C8 32 6 36 6 40C6 48 12 54 20 54C22 54 24 53 26 52C28 54 31 56 34 56C42 56 48 50 48 42C48 40 47 38 46 36C50 34 53 30 53 25C53 17 47 11 39 11C36 11 33 12 31 14C29 11 27 10 24 10Z" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+      <path d="M24 18C24 18 28 22 24 28C20 34 28 38 26 44" stroke="var(--blood-bright)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="i-car" viewBox="0 0 64 64">
+      <path d="M8 42L12 28C13 24 17 22 21 22H43C47 22 51 24 52 28L56 42" stroke="var(--bone)" stroke-width="3" stroke-linejoin="round" fill="none"/>
+      <rect x="6" y="42" width="52" height="10" rx="3" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <circle cx="18" cy="54" r="5" stroke="var(--blood-bright)" stroke-width="3" fill="none"/>
+      <circle cx="46" cy="54" r="5" stroke="var(--blood-bright)" stroke-width="3" fill="none"/>
+    </symbol>
+    <symbol id="i-play" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="24" stroke="var(--bone)" stroke-width="3" fill="none"/>
+      <path d="M26 20L46 32L26 44Z" fill="var(--blood-bright)"/>
+    </symbol>
+  </defs>
+</svg>
 
-        <div onclick="event.stopPropagation()">
-            <button onclick="acceder()">Entrar</button>
-        </div>
+<!-- ===== CRÉDITOS ===== -->
+<div class="credits-bar">
+  <div class="names">David Hernández Gutiérrez · Iker Alonso Romero Silva · Ulises Ortiz Vázquez · Santiago Cervantes Martínez</div>
+  <div class="meta">Reacciones químicas — Conservación de la materia en la formación de nuevas sustancias <span class="sep">|</span> Preparatoria 4° "A"</div>
+</div>
+
+<!-- ===== NAV ===== -->
+<nav class="topnav">
+  <div class="wrap">
+    <a href="#inicio" class="brand">RQ<span>·</span>QUÍMICA</a>
+    <ul class="navlinks">
+      <li><a href="#cocina"><span class="num">01</span> Cocina</a></li>
+      <li><a href="#hogar"><span class="num">02</span> Hogar</a></li>
+      <li><a href="#entorno"><span class="num">03</span> Entorno</a></li>
+      <li><a href="#recursos">Recursos</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero" id="inicio">
+
+  <div class="dash-bar">
+    <span>QUÍMICA APLICADA</span><span class="line"></span>
+    <span>SI NO HAY REACCIÓN, NO HAY CAMBIO.</span><span class="line"></span>
+    <span>QUÍMICA APLICADA</span>
+  </div>
+
+  <div class="badge-corner">
+    <span class="big">RQ</span>
+    <span class="divider"></span>
+    <span class="lines">FICHA TÉCNICA<br>QUÍMICA APLICADA</span>
+  </div>
+
+  <div class="hero-art">
+    <svg viewBox="0 0 900 420" preserveAspectRatio="xMidYMid slice">
+      <g transform="translate(610,60) rotate(18)">
+        <path d="M -42,-130 L 42,-130 L 78,55 Q 78,108 0,108 Q -78,108 -78,55 Z" fill="rgba(241,235,223,0.92)"/>
+        <rect x="-16" y="-162" width="32" height="36" fill="rgba(241,235,223,0.92)"/>
+        <path d="M -60,30 Q 0,8 60,30 L 60,55 Q 60,96 0,96 Q -60,96 -60,55 Z" fill="#0b0a09" opacity="0.85"/>
+        <circle cx="-12" cy="18" r="7" fill="#0b0a09" opacity="0.6"/>
+        <circle cx="18" cy="0" r="5" fill="#0b0a09" opacity="0.6"/>
+        <circle cx="2" cy="-38" r="10" fill="rgba(11,10,9,0.5)"/>
+        <circle cx="24" cy="-66" r="6" fill="rgba(11,10,9,0.4)"/>
+        <circle cx="-6" cy="-92" r="4" fill="rgba(11,10,9,0.35)"/>
+      </g>
+      <g transform="translate(150,300)" stroke="rgba(241,235,223,0.55)" stroke-width="3.5" fill="rgba(241,235,223,0.85)">
+        <line x1="0" y1="0" x2="70" y2="-48"/>
+        <line x1="0" y1="0" x2="-58" y2="-22"/>
+        <line x1="0" y1="0" x2="12" y2="70"/>
+        <circle cx="0" cy="0" r="12"/>
+        <circle cx="70" cy="-48" r="8"/>
+        <circle cx="-58" cy="-22" r="8"/>
+        <circle cx="12" cy="70" r="8"/>
+      </g>
+      <g transform="translate(740,330)" stroke="rgba(241,235,223,0.35)" stroke-width="3" fill="rgba(241,235,223,0.6)">
+        <line x1="0" y1="0" x2="-45" y2="-30"/>
+        <line x1="0" y1="0" x2="40" y2="-20"/>
+        <circle cx="0" cy="0" r="8"/>
+        <circle cx="-45" cy="-30" r="5"/>
+        <circle cx="40" cy="-20" r="5"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="title-wrap">
+    <h1 class="title">REACCIONES<br>QUÍMICAS</h1>
+  </div>
+  <div class="script">transformando la vida cotidiana</div>
+
+  <div class="checker"></div>
+
+  <div class="hero-tags">
+    <div class="tag-block left">
+      DE LA COCINA<br>AL HOGAR.<br>DEL CUERPO<br>A LA TECNOLOGÍA.
     </div>
-
-    <!-- PANTALLA DE NÚMEROS -->
-    <div id="numeros" onclick="regresar()">
-        <h1>Contactos</h1>
-
-        <div class="lista">
-
-            <div class="contacto" onclick="event.stopPropagation(); location.href='tel:+522283123524'">
-                <span><strong>David</strong></span><span class="texto-opaco">+52 228 312 3524</span>
-            </div>
-
-            <div class="contacto" onclick="event.stopPropagation(); location.href='tel:+522281567186'">
-                <span><strong>Adriana</strong></span><span class="texto-opaco">+52 228 156 7186</span>
-            </div>
-
-            <div class="contacto" onclick="event.stopPropagation(); location.href='tel:+522283611513'">
-                <span><strong>Mónica</strong></span><span class="texto-opaco">+52 228 361 1513</span>
-            </div>
-
-            <div class="contacto" onclick="event.stopPropagation(); location.href='tel:+522299848615'">
-                <span><strong>Eduardo</strong></span><span class="texto-opaco">+52 229 984 8615</span>
-            </div>
-
-            <div class="contacto" onclick="event.stopPropagation(); location.href='tel:+522284106817'">
-                <span><strong>Sergio</strong></span><span class="texto-opaco">+52 228 410 6817</span>
-            </div>
-
-            <div class="contacto" onclick="event.stopPropagation(); location.href='tel:+522281245180'">
-                <span><strong>Eduardo</strong></span><span class="texto-opaco">+52 228 124 5180</span>
-            </div>
-
-            <div class="contacto" onclick="event.stopPropagation(); location.href='tel:+522282972364'">
-                <span><strong>Héctor</strong></span><span class="texto-opaco">+52 228 297 2364</span>
-            </div>
-
-            <div class="contacto" onclick="event.stopPropagation(); location.href='tel:+522281476572'">
-                <span><strong>Óscar</strong></span><span class="texto-opaco">+52 228 147 6572</span>
-            </div>
-
-            <div class="contacto" onclick="event.stopPropagation(); location.href='tel:+522283632102'">
-                <span><strong>David</strong></span><span class="texto-opaco">+52 228 363 2102</span>
-            </div>
-
-            <div class="contacto" onclick="event.stopPropagation(); location.href='tel:+522281257340'">
-                <span><strong>Aldo</strong></span><span class="texto-opaco">+52 228 125 7340</span>
-            </div>
-
-            <div class="contacto" onclick="event.stopPropagation(); location.href='tel:+522281781492'">
-                <span><strong>Betsabe</strong></span><span class="texto-opaco">+52 228 178 1492</span>
-            </div>
-
-            <div class="contacto" onclick="event.stopPropagation(); location.href='tel:+522283412324'">
-                <span><strong>Gemma</strong></span><span class="texto-opaco">+52 228 341 2324</span>
-            </div>
-
-        </div>
-
-        <div class="seccion-extra">
-            <a class="archivo" href="https://drive.google.com/file/d/1h4k9gthAi7zyb1s84F9UYYbuzjpWoh0P/view?usp=sharing" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-                Archivo 1909
-            </a>
-
-            <div class="casa">
-                <a href="https://www.google.com.mx/maps/dir//19.497249,-96.852978" onclick="event.stopPropagation()">
-                    Casa
-                </a>
-            </div>
-        </div>
-
+    <div class="oval-badge">• QUÍMICA EN TODO LUGAR •</div>
+    <div class="tag-block right">
+      NADA SE CREA<br>NI SE DESTRUYE.<br>TODO SE<br>TRANSFORMA.
     </div>
+  </div>
+
+  <div class="dash-bar" style="margin-top:1.6rem;">
+    <span>QUÍMICA APLICADA</span><span class="line"></span>
+    <span>REACTIVOS → PRODUCTOS</span><span class="line"></span>
+    <span>QUÍMICA APLICADA</span>
+  </div>
+
+</header>
+
+<!-- ===== ¿QUÉ SON? ===== -->
+<section class="lede">
+  <div class="wrap">
+    <span class="block-label">¿QUÉ SON?</span>
+    <p>Las reacciones químicas son procesos mediante los cuales una o más sustancias, llamadas reactivos, se transforman en nuevas sustancias con propiedades diferentes, llamadas productos. Durante estas transformaciones, los átomos se reorganizan para formar nuevas moléculas, sin que la materia se cree o destruya, de acuerdo con la Ley de Conservación de la Materia.</p>
+    <p style="margin-top:1rem;">Ocurren constantemente en la naturaleza, en los seres vivos y en las actividades humanas. Gracias a ellas es posible cocinar alimentos, respirar, producir medicamentos, generar energía y fabricar dispositivos tecnológicos.</p>
+  </div>
+</section>
+
+<!-- ===== EJEMPLO DE REFERENCIA ===== -->
+<div class="equation">
+  <div class="wrap">
+    <span class="lbl">EJEMPLO DE REFERENCIA — FOTOSÍNTESIS</span>
+    6 CO₂ + 6 H₂O + LUZ SOLAR <span class="arrow">→</span> C₆H₁₂O₆ + 6 O₂
+  </div>
+</div>
+
+<!-- ===== CÓMO IDENTIFICAR ===== -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="block-label">EVIDENCIAS</span>
+      <h2 class="section-title">¿Cómo identificar una reacción química?</h2>
+      <p class="section-sub">Estas señales indican que se han formado nuevas sustancias.</p>
+    </div>
+    <div class="chip-row">
+      <div class="chip"><span class="icon-wrap"><svg class="icon"><use href="#i-palette"/></svg></span><span class="label">Cambio de color</span></div>
+      <div class="chip"><span class="icon-wrap"><svg class="icon"><use href="#i-bubbles"/></svg></span><span class="label">Gases o burbujas</span></div>
+      <div class="chip"><span class="icon-wrap"><svg class="icon"><use href="#i-precipitate"/></svg></span><span class="label">Aparición de un sólido</span></div>
+      <div class="chip"><span class="icon-wrap"><svg class="icon"><use href="#i-spark"/></svg></span><span class="label">Emisión de luz</span></div>
+      <div class="chip"><span class="icon-wrap"><svg class="icon"><use href="#i-thermo"/></svg></span><span class="label">Libera o absorbe calor</span></div>
+      <div class="chip"><span class="icon-wrap"><svg class="icon"><use href="#i-scent"/></svg></span><span class="label">Cambio de olor</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TIPOS DE REACCIONES ===== -->
+<section class="cat alt">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="block-label">CLASIFICACIÓN</span>
+      <h2 class="section-title">Tipos de reacciones químicas</h2>
+    </div>
+    <div class="type-list">
+      <div class="type-card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-synthesis"/></svg></span>
+        <div><h3>Síntesis</h3><p>Dos o más sustancias se combinan para formar una nueva.</p><span class="example">Ejemplo: formación del agua a partir de hidrógeno y oxígeno.</span></div>
+      </div>
+      <div class="type-card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-decomp"/></svg></span>
+        <div><h3>Descomposición</h3><p>Una sustancia se divide en sustancias más simples.</p><span class="example">Ejemplo: descomposición de materia orgánica.</span></div>
+      </div>
+      <div class="type-card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-flame"/></svg></span>
+        <div><h3>Combustión</h3><p>Una sustancia reacciona con oxígeno liberando energía.</p><span class="example">Ejemplo: encender una vela o el motor de un automóvil.</span></div>
+      </div>
+      <div class="type-card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-apple"/></svg></span>
+        <div><h3>Oxidación</h3><p>Ocurre cuando una sustancia reacciona con el oxígeno.</p><span class="example">Ejemplo: una manzana cortada que se oscurece.</span></div>
+      </div>
+      <div class="type-card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-balance"/></svg></span>
+        <div><h3>Neutralización</h3><p>Reacción entre un ácido y una base.</p><span class="example">Ejemplo: medicamentos para la acidez estomacal.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 01 COCINA ===== -->
+<section class="cat" id="cocina">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow-num">01</span>
+      <h2 class="section-title">En la cocina y en los alimentos</h2>
+      <p class="section-sub">La cocina es uno de los lugares donde observamos más reacciones químicas.</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-bread"/></svg></span>
+        <h3>Horneado del pan</h3>
+        <p>La levadura transforma azúcares en dióxido de carbono y alcohol mediante fermentación. El gas producido queda atrapado en la masa y hace que el pan aumente de tamaño.</p>
+      </div>
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-egg"/></svg></span>
+        <h3>Cocción de huevos</h3>
+        <p>Las proteínas cambian su estructura al calentarse. Por ello la clara pasa de transparente a blanca y sólida.</p>
+      </div>
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-caramel"/></svg></span>
+        <h3>Caramelización del azúcar</h3>
+        <p>Al calentarse, el azúcar produce nuevas sustancias responsables del color y sabor del caramelo.</p>
+      </div>
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-apple"/></svg></span>
+        <h3>Oxidación de frutas</h3>
+        <p>Cuando una manzana o un plátano se cortan y entran en contacto con el aire, reaccionan con el oxígeno y se oscurecen.</p>
+      </div>
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-ferment"/></svg></span>
+        <h3>Fermentación de alimentos</h3>
+        <p>Productos como el yogur, el queso y el pan se elaboran gracias a microorganismos que realizan reacciones químicas.</p>
+      </div>
+    </div>
+  </div>
+  <div class="importance">
+    <div class="wrap">
+      <h2>Importancia</h2>
+      <ul class="check-list">
+        <li>Mejora sabores y aromas.</li>
+        <li>Facilita la digestión.</li>
+        <li>Conserva alimentos.</li>
+        <li>Incrementa el valor nutricional.</li>
+        <li>Garantiza la seguridad alimentaria.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 02 HOGAR ===== -->
+<section class="cat alt" id="hogar">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow-num">02</span>
+      <h2 class="section-title">En el hogar y en la salud</h2>
+      <p class="section-sub">Las reacciones químicas ayudan a mantener la higiene y proteger nuestra salud.</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-soap"/></svg></span>
+        <h3>Jabones y detergentes</h3>
+        <p>Sus componentes reaccionan con la grasa y permiten eliminarla fácilmente con agua.</p>
+      </div>
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-spray"/></svg></span>
+        <h3>Desinfectantes</h3>
+        <p>El cloro y el alcohol eliminan microorganismos mediante reacciones químicas que destruyen sus estructuras celulares.</p>
+      </div>
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-tooth"/></svg></span>
+        <h3>Pasta dental</h3>
+        <p>Contiene compuestos que fortalecen el esmalte dental y ayudan a prevenir caries.</p>
+      </div>
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-pill"/></svg></span>
+        <h3>Medicamentos</h3>
+        <p>Actúan mediante reacciones químicas específicas dentro del organismo para aliviar síntomas o combatir enfermedades.</p>
+      </div>
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-stomach"/></svg></span>
+        <h3>Digestión</h3>
+        <p>El cuerpo transforma los alimentos en nutrientes y energía mediante miles de reacciones controladas por enzimas.</p>
+      </div>
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-lungs"/></svg></span>
+        <h3>Respiración celular</h3>
+        <p>Las células utilizan oxígeno para obtener energía de los nutrientes.</p>
+      </div>
+    </div>
+  </div>
+  <div class="importance">
+    <div class="wrap">
+      <h2>Importancia</h2>
+      <ul class="check-list">
+        <li>Mantiene la higiene.</li>
+        <li>Previene enfermedades.</li>
+        <li>Produce medicamentos.</li>
+        <li>Permite obtener energía.</li>
+        <li>Mejora la calidad de vida.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 03 ENTORNO ===== -->
+<section class="cat" id="entorno">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow-num">03</span>
+      <h2 class="section-title">En el entorno y la tecnología</h2>
+      <p class="section-sub">Las reacciones químicas son fundamentales para la naturaleza y el desarrollo tecnológico.</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-leaf"/></svg></span>
+        <h3>Fotosíntesis</h3>
+        <p>Las plantas transforman agua y CO₂ en glucosa y oxígeno usando energía solar. Produce gran parte del oxígeno del planeta.</p>
+      </div>
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-mushroom"/></svg></span>
+        <h3>Descomposición orgánica</h3>
+        <p>Bacterias y hongos transforman restos de seres vivos en nutrientes que regresan al suelo.</p>
+      </div>
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-flame"/></svg></span>
+        <h3>Combustión</h3>
+        <p>La quema de combustibles libera energía utilizada para el transporte, la industria y la generación eléctrica.</p>
+      </div>
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-battery"/></svg></span>
+        <h3>Baterías y pilas</h3>
+        <p>Funcionan gracias a reacciones químicas que producen corriente eléctrica.</p>
+      </div>
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-water-drop"/></svg></span>
+        <h3>Tratamiento de agua</h3>
+        <p>Las plantas potabilizadoras eliminan contaminantes y microorganismos mediante reacciones químicas.</p>
+      </div>
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-factory"/></svg></span>
+        <h3>Fabricación de materiales</h3>
+        <p>Plásticos, fertilizantes, medicamentos, pinturas y componentes electrónicos son resultado de reacciones controladas.</p>
+      </div>
+      <div class="card">
+        <span class="icon-wrap"><svg class="icon"><use href="#i-sun"/></svg></span>
+        <h3>Energías renovables</h3>
+        <p>Las celdas de combustible y baterías recargables aprovechan procesos químicos para almacenar y suministrar energía.</p>
+      </div>
+    </div>
+  </div>
+  <div class="importance">
+    <div class="wrap">
+      <h2>Importancia</h2>
+      <ul class="check-list">
+        <li>Mantienen el equilibrio ambiental.</li>
+        <li>Generan energía.</li>
+        <li>Favorecen el desarrollo tecnológico.</li>
+        <li>Permiten fabricar materiales útiles.</li>
+        <li>Contribuyen al cuidado del medio ambiente.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EJEMPLOS RÁPIDOS ===== -->
+<section>
+  <div class="wrap table-wrap">
+    <span class="block-label">REFERENCIA RÁPIDA</span>
+    <h2 class="section-title">Ejemplos rápidos de reacciones químicas</h2>
+    <table class="examples">
+      <thead>
+        <tr><th>Situación cotidiana</th><th>Reacción química</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Encender una vela</td><td>Combustión</td></tr>
+        <tr><td>Cocinar carne</td><td>Transformación de proteínas</td></tr>
+        <tr><td>Respirar</td><td>Respiración celular</td></tr>
+        <tr><td>Oxidación del hierro</td><td>Corrosión</td></tr>
+        <tr><td>Uso de pilas</td><td>Reacción electroquímica</td></tr>
+        <tr><td>Fotosíntesis</td><td>Conversión de energía solar</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== IMPORTANCIA GLOBAL ===== -->
+<section class="global-importance">
+  <div class="wrap">
+    <h2>¿Por qué son importantes?</h2>
+    <ul>
+      <li>La vida de todos los seres vivos.</li>
+      <li>La producción de alimentos.</li>
+      <li>La fabricación de medicamentos.</li>
+      <li>La generación de energía.</li>
+      <li>El desarrollo tecnológico.</li>
+      <li>La protección del medio ambiente.</li>
+      <li>El funcionamiento de nuestro cuerpo.</li>
+    </ul>
+    <p class="closing">Sin ellas no existiría la vida ni la tecnología moderna.</p>
+  </div>
+</section>
+
+<!-- ===== DATOS CURIOSOS ===== -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="block-label">DATOS CURIOSOS</span>
+      <h2 class="section-title">¿Sabías que...?</h2>
+    </div>
+    <div class="facts-grid">
+      <div class="fact"><span class="icon-wrap"><svg class="icon"><use href="#i-brain"/></svg></span><p>El cuerpo humano realiza miles de millones de reacciones químicas cada día.</p></div>
+      <div class="fact"><span class="icon-wrap"><svg class="icon"><use href="#i-leaf"/></svg></span><p>La fotosíntesis produce gran parte del oxígeno que respiramos.</p></div>
+      <div class="fact"><span class="icon-wrap"><svg class="icon"><use href="#i-battery"/></svg></span><p>Las baterías de los teléfonos funcionan gracias a reacciones químicas reversibles.</p></div>
+      <div class="fact"><span class="icon-wrap"><svg class="icon"><use href="#i-bread"/></svg></span><p>El pan aumenta de tamaño debido al dióxido de carbono producido por la levadura.</p></div>
+      <div class="fact"><span class="icon-wrap"><svg class="icon"><use href="#i-car"/></svg></span><p>Los automóviles obtienen energía a partir de reacciones de combustión.</p></div>
+      <div class="fact"><span class="icon-wrap"><svg class="icon"><use href="#i-pill"/></svg></span><p>Los medicamentos funcionan porque interactúan químicamente con nuestro organismo.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RECURSOS MULTIMEDIA ===== -->
+<section class="resources" id="recursos">
+  <div class="wrap">
+    <span class="block-label">PARA SEGUIR EXPLORANDO</span>
+    <h2 class="section-title">Recursos multimedia</h2>
+    <div class="res-grid">
+      <a class="res-card" href="https://www.youtube.com/results?search_query=que+son+las+reacciones+quimicas" target="_blank" rel="noopener">
+        <span class="play"><svg class="icon"><use href="#i-play"/></svg></span>
+        <span class="res-text">¿Qué son las reacciones químicas?</span>
+      </a>
+      <a class="res-card" href="https://www.youtube.com/results?search_query=reacciones+quimicas+en+la+vida+cotidiana" target="_blank" rel="noopener">
+        <span class="play"><svg class="icon"><use href="#i-play"/></svg></span>
+        <span class="res-text">Reacciones químicas en la vida cotidiana</span>
+      </a>
+      <a class="res-card" href="https://www.youtube.com/results?search_query=experimentos+de+reacciones+quimicas" target="_blank" rel="noopener">
+        <span class="play"><svg class="icon"><use href="#i-play"/></svg></span>
+        <span class="res-text">Experimentos de reacciones químicas</span>
+      </a>
+    </div>
+    <p class="res-note">Puedes convertir cualquiera de estos enlaces en un código QR para que las personas que visiten el cartel o la página accedan a información adicional desde su teléfono.</p>
+  </div>
+</section>
+
+<!-- ===== CONCLUSIÓN ===== -->
+<section class="conclusion">
+  <div class="wrap">
+    <h2>Sin reacción, no hay equilibrio ni progreso.</h2>
+    <p>Las reacciones químicas son procesos fundamentales que permiten la transformación de la materia y hacen posible la vida tal como la conocemos. Están presentes en la cocina, en el hogar, en la salud, en el medio ambiente y en la tecnología. Gracias a ellas obtenemos energía, producimos alimentos, combatimos enfermedades, desarrollamos nuevos materiales y aprovechamos los recursos naturales de manera más eficiente.</p>
+  </div>
+</section>
+
+<!-- ===== FRASE FINAL ===== -->
+<section class="quote-final">
+  <span class="mark">"</span>
+  <blockquote>Desde el pan que comemos hasta el teléfono que usamos, las reacciones químicas transforman nuestro mundo todos los días.</blockquote>
+</section>
+
+<!-- ===== BOTÓN AL CARTEL ===== -->
+<section class="poster-cta">
+  <div class="wrap">
+    <span class="block-label">CONTENIDO RELACIONADO</span>
+    <h2 class="section-title" style="font-size:1.7rem;">¿Quieres ver el cartel?</h2>
+    <p class="section-sub" style="margin:0 auto;">Consulta el cartel de “En el entorno y la tecnología”, con el mismo contenido en formato imprimible.</p>
+    <a class="cta-button" href="https://emergencia1909.github.io/" target="_blank" rel="noopener">
+      VER EL CARTEL: ENTORNO Y TECNOLOGÍA <span class="arrow">→</span>
+    </a>
+    <p class="res-note">Enlace provisional — se actualizará con la URL definitiva del cartel.</p>
+  </div>
+</section>
+
+<footer class="final">
+  <div class="dash-bar" style="border-top:1px solid var(--blood);">
+    <span>QUÍMICA APLICADA</span><span class="line"></span>
+    <span>FICHA N.º 01</span><span class="line"></span>
+    <span>QUÍMICA APLICADA</span>
+  </div>
+</footer>
 
 </body>
 </html>
