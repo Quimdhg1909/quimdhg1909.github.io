@@ -24,6 +24,7 @@
     background:var(--ink);
     color:var(--bone);
     font-family:'Barlow', sans-serif;
+    overflow-x:hidden;
   }
   section, header, footer{ scroll-margin-top:var(--nav-h); }
   img,svg{ max-width:100%; }
@@ -51,6 +52,10 @@
     color:var(--bone-dim); letter-spacing:0.01em;
   }
   .credits-bar .meta .sep{ color:var(--blood-bright); margin:0 0.5rem; }
+  @media (max-width:480px){
+    .credits-bar .names{ font-size:0.68rem; }
+    .credits-bar .meta{ font-size:0.66rem; }
+  }
 
   /* ===== NAV ===== */
   nav.topnav{
@@ -84,6 +89,11 @@
   }
   .navlinks a:hover{ color:var(--blood-bright); }
   @media (max-width:680px){ .navlinks{ gap:0.9rem; } .navlinks span.num{ display:none; } }
+  @media (max-width:430px){
+    .navlinks{ gap:0.55rem; }
+    .navlinks a{ font-size:0.66rem; letter-spacing:0.05em; }
+    .brand{ font-size:0.92rem; }
+  }
 
   /* ===== HERO ===== */
   .hero{
@@ -116,6 +126,11 @@
   }
   .dash-bar .line{ flex:1; height:1px; background:rgba(241,235,223,0.5); }
   .dash-bar span:not(.line){ white-space:nowrap; }
+  @media (max-width:560px){
+    .dash-bar{ flex-wrap:wrap; justify-content:center; text-align:center; row-gap:0.3rem; }
+    .dash-bar .line{ display:none; }
+    .dash-bar span:not(.line){ white-space:normal; }
+  }
 
   .hero-art{ position:relative; z-index:1; height:clamp(9rem,22vw,15rem); margin-top:0.5rem; }
   .hero-art svg{ width:100%; height:100%; }
@@ -227,6 +242,10 @@
   .type-card h3{ font-family:'Anton', sans-serif; font-weight:400; text-transform:uppercase; font-size:1.15rem; margin:0 0 0.3rem; }
   .type-card p{ margin:0 0 0.35rem; font-size:0.92rem; line-height:1.5; color:var(--bone-dim); }
   .type-card .example{ font-family:'Oswald', sans-serif; font-size:0.78rem; letter-spacing:0.03em; color:var(--blood-bright); text-transform:uppercase; }
+  @media (max-width:430px){
+    .type-card{ flex-direction:column; }
+    .type-card .icon-wrap{ margin-bottom:0.2rem; }
+  }
 
   /* card grids */
   .grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(13.5rem,1fr)); gap:0.9rem; padding-bottom:2.4rem; }
@@ -286,7 +305,7 @@
   .conclusion p{ font-size:clamp(0.95rem,1.5vw,1.1rem); line-height:1.7; color:var(--bone-dim); max-width:46rem; margin:0; }
 
   /* frase final */
-  .quote-final{ background:#160708; padding:4rem 0; text-align:center; border-top:1px solid var(--blood); border-bottom:1px solid var(--blood); }
+  .quote-final{ background:#160708; padding:4rem 1.4rem; text-align:center; border-top:1px solid var(--blood); border-bottom:1px solid var(--blood); }
   .quote-final blockquote{ margin:0; font-family:'Pacifico', cursive; font-size:clamp(1.3rem,3.6vw,2.2rem); color:var(--bone); line-height:1.5; max-width:46rem; margin:0 auto; }
   .quote-final .mark{ font-family:'Anton', sans-serif; font-size:2.4rem; color:var(--blood-bright); line-height:0; display:block; }
 
@@ -303,6 +322,13 @@
   .cta-button:hover{ background:var(--bone); color:var(--ink); }
   .cta-button .arrow{ font-family:'Anton', sans-serif; font-size:1.2rem; }
   .poster-cta .res-note{ margin:0.9rem auto 0; }
+  @media (max-width:480px){
+    .cta-button{
+      display:flex; flex-wrap:wrap; justify-content:center; text-align:center;
+      max-width:100%; white-space:normal;
+      font-size:0.78rem; letter-spacing:0.06em; padding:0.8rem 1.2rem;
+    }
+  }
 
   footer.final{ background:var(--ink); padding-top:0.6rem; }
 
@@ -810,6 +836,7 @@
   <div class="wrap table-wrap">
     <span class="block-label">REFERENCIA RÁPIDA</span>
     <h2 class="section-title">Ejemplos rápidos de reacciones químicas</h2>
+    <p class="section-sub" style="margin-bottom:0.8rem;">Desliza horizontalmente para ver la tabla completa en pantallas pequeñas →</p>
     <table class="examples">
       <thead>
         <tr><th>Situación cotidiana</th><th>Reacción química</th></tr>
